@@ -1,0 +1,51 @@
+{
+    "name": "superbig/craft3-mobiledetect",
+    "description": "Use Mobile_Detect for detecting mobile devices (including tablets)",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "mobiledetect"
+    ],
+    "support": {
+        "docs": "https://github.com/sjelfull/craft3-mobiledetect/blob/master/README.md",
+        "issues": "https://github.com/sjelfull/craft3-mobiledetect/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Superbig",
+            "homepage": "https://superbig.co"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "~3.0.0-beta.23",
+        "mobiledetect/mobiledetectlib": "^2.8"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+          "superbig\\mobiledetect\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "MobileDetect",
+        "handle": "mobile-detect",
+        "schemaVersion": "1.0.0",
+        "hasCpSettings": false,
+        "hasCpSection": false,
+        "changelogUrl": "https://raw.githubusercontent.com/sjelfull/craft3-mobiledetect/master/CHANGELOG.md",
+        "components": {
+            "mobileDetectService": "superbig\\mobiledetect\\services\\MobileDetectService"
+        },
+        "class": "superbig\\mobiledetect\\MobileDetect"
+    }
+}
