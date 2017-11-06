@@ -10,7 +10,7 @@
 
 namespace superbig\mobiledetect\variables;
 
-use superbig\mobiledetect\MobileDetect;
+use Detection\MobileDetect as MobileDetectLib;
 
 use Craft;
 
@@ -32,7 +32,7 @@ class MobileDetectVariable
     public function getMobileDetect ()
     {
         if ( $this->_mobileDetect === null ) {
-            $this->_mobileDetect = new \Mobile_Detect();
+            $this->_mobileDetect = new MobileDetectLib();
         }
 
         return $this->_mobileDetect;

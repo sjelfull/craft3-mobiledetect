@@ -10,7 +10,7 @@
 
 namespace superbig\mobiledetect\services;
 
-use superbig\mobiledetect\MobileDetect;
+use Detection\MobileDetect as MobileDetectLib;
 
 use Craft;
 use craft\base\Component;
@@ -33,7 +33,7 @@ class MobileDetectService extends Component
     public function getMobileDetect ()
     {
         if ( $this->_mobileDetect === null ) {
-            $this->_mobileDetect = new \Mobile_Detect();
+            $this->_mobileDetect = new MobileDetectLib();
         }
 
         return $this->_mobileDetect;
