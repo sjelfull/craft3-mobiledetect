@@ -22,6 +22,8 @@ use craft\base\Component;
  */
 class MobileDetectService extends Component
 {
+    private $_mobileDetect;
+
     // Public Methods
     // =========================================================================
 
