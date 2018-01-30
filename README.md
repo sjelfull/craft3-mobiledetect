@@ -31,7 +31,7 @@ fairly complete wrapper for the [Mobile_Detect](http://mobiledetect.net/) librar
 The plugin exposes most of Mobile_Detect's methods, and can be used in your Twig:
 
 ```twig
-{{ craft.detect.isMobile ? 'I am mobile.' : 'I am not mobile.' }}
+{{ craft.mobileDetect.isMobile ? 'I am mobile.' : 'I am not mobile.' }}
 ```
 
 ...or as a PHP service:
