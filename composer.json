@@ -2,7 +2,7 @@
     "name": "superbig/craft3-mobiledetect",
     "description": "Use Mobile_Detect for detecting mobile devices (including tablets)",
     "type": "craft-plugin",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "keywords": [
         "craft",
         "cms",
