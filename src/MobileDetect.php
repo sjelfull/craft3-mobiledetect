@@ -46,7 +46,7 @@ class MobileDetect extends Plugin
     /**
      * @inheritdoc
      */
-    public function init ()
+    public function init (): void
     {
         parent::init();
         self::$plugin = $this;
@@ -54,7 +54,7 @@ class MobileDetect extends Plugin
         Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_INIT,
-            function (Event $event) {
+            static function (Event $event) : void {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
                 $variable->set('mobileDetect', MobileDetectVariable::class);

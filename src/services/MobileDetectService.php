@@ -22,7 +22,7 @@ use craft\base\Component;
  */
 class MobileDetectService extends Component
 {
-    private $_mobileDetect;
+    private ?MobileDetectLib $_mobileDetect = null;
 
     // Public Methods
     // =========================================================================
@@ -30,7 +30,7 @@ class MobileDetectService extends Component
     /**
      * @return \Mobile_Detect|null
      */
-    public function getMobileDetect ()
+    public function getMobileDetect (): MobileDetectLib
     {
         if ( $this->_mobileDetect === null ) {
             $this->_mobileDetect = new MobileDetectLib();
@@ -41,30 +41,24 @@ class MobileDetectService extends Component
 
     /**
      * Returns true for any mobile device (including tablets!)
-     *
-     * @return bool
      */
-    public function isMobile ()
+    public function isMobile (): bool
     {
         return $this->getMobileDetect()->isMobile();
     }
 
     /**
      * Returns true for tablets only
-     *
-     * @return bool
      */
-    public function isTablet ()
+    public function isTablet (): bool
     {
         return $this->getMobileDetect()->isTablet();
     }
 
     /**
      * Returns true for phones only
-     *
-     * @return bool
      */
-    public function isPhone ()
+    public function isPhone (): bool
     {
         return $this->isMobile() && !$this->isTablet();
     }
@@ -74,7 +68,7 @@ class MobileDetectService extends Component
      *
      * @return mixed
      */
-    public function isiOS ()
+    public function isiOS (): bool
     {
         return $this->getMobileDetect()->isiOS();
     }
@@ -84,7 +78,7 @@ class MobileDetectService extends Component
      *
      * @return mixed
      */
-    public function isAndroidOS ()
+    public function isAndroidOS (): bool
     {
         return $this->getMobileDetect()->isAndroidOS();
     }
@@ -94,7 +88,7 @@ class MobileDetectService extends Component
      *
      * @return mixed
      */
-    public function isBlackBerryOS ()
+    public function isBlackBerryOS (): bool
     {
         return $this->getMobileDetect()->isBlackBerryOS();
     }
@@ -104,7 +98,7 @@ class MobileDetectService extends Component
      *
      * @return mixed
      */
-    public function isPalmOS ()
+    public function isPalmOS (): bool
     {
         return $this->getMobileDetect()->isPalmOS();
     }
@@ -114,7 +108,7 @@ class MobileDetectService extends Component
      *
      * @return mixed
      */
-    public function isSymbianOS ()
+    public function isSymbianOS (): bool
     {
         return $this->getMobileDetect()->isSymbianOS();
     }
@@ -124,7 +118,7 @@ class MobileDetectService extends Component
      *
      * @return mixed
      */
-    public function isWindowsMobileOS ()
+    public function isWindowsMobileOS (): bool
     {
         return $this->getMobileDetect()->isWindowsMobileOS();
     }
@@ -134,7 +128,7 @@ class MobileDetectService extends Component
      *
      * @return mixed
      */
-    public function isWindowsPhoneOS ()
+    public function isWindowsPhoneOS (): bool
     {
         return $this->getMobileDetect()->isWindowsPhoneOS();
     }
@@ -159,10 +153,8 @@ class MobileDetectService extends Component
      *
      * @param      $pattern
      * @param null $userAgent
-     *
-     * @return bool
      */
-    public function match ($pattern, $userAgent = null)
+    public function match ($pattern, $userAgent = null): bool
     {
         return $this->getMobileDetect()->match($pattern, $userAgent);
     }
@@ -181,30 +173,24 @@ class MobileDetectService extends Component
 
     /**
      * Returns browser grade, e.g "A"
-     *
-     * @return string
      */
-    public function mobileGrade ()
+    public function mobileGrade (): string
     {
         return $this->getMobileDetect()->mobileGrade();
     }
 
     /**
      * Returns the Mobile_Detect library version
-     *
-     * @return string
      */
-    public function getScriptVersion ()
+    public function getScriptVersion (): string
     {
         return $this->getMobileDetect()->getScriptVersion();
     }
 
     /**
      * Get user agent
-     *
-     * @return null|string
      */
-    public function getUserAgent ()
+    public function getUserAgent (): ?string
     {
         return $this->getMobileDetect()->getUserAgent();
     }
@@ -213,10 +199,8 @@ class MobileDetectService extends Component
      * Set user agent
      *
      * @param null $userAgent
-     *
-     * @return null|string
      */
-    public function setUserAgent ($userAgent = null)
+    public function setUserAgent ($userAgent = null): ?string
     {
         return $this->getMobileDetect()->setUserAgent($userAgent);
     }
@@ -224,9 +208,9 @@ class MobileDetectService extends Component
     /**
      * Get mobile headers
      *
-     * @return array
+     * @return mixed[]
      */
-    public function getMobileHeaders ()
+    public function getMobileHeaders (): array
     {
         return $this->getMobileDetect()->getMobileHeaders();
     }
@@ -234,9 +218,9 @@ class MobileDetectService extends Component
     /**
      * Get http headers
      *
-     * @return array
+     * @return mixed[]
      */
-    public function getHttpHeaders ()
+    public function getHttpHeaders (): array
     {
         return $this->getMobileDetect()->getHttpHeaders();
     }
@@ -246,7 +230,7 @@ class MobileDetectService extends Component
      *
      * @param null $httpHeaders
      */
-    public function setHttpHeaders ($httpHeaders = null)
+    public function setHttpHeaders ($httpHeaders = null): void
     {
         $this->getMobileDetect()->setHttpHeaders($httpHeaders);
     }
@@ -254,9 +238,9 @@ class MobileDetectService extends Component
     /**
      * Get CloudFront headers
      *
-     * @return array
+     * @return mixed[]
      */
-    public function getCfHeaders ()
+    public function getCfHeaders (): array
     {
         return $this->getMobileDetect()->getCfHeaders();
     }
@@ -266,7 +250,7 @@ class MobileDetectService extends Component
      *
      * @param null $cfHeaders
      */
-    public function setCfHeaders ($cfHeaders = null)
+    public function setCfHeaders ($cfHeaders = null): void
     {
         $this->getMobileDetect()->setCfHeaders($cfHeaders);
     }
