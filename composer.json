@@ -11,7 +11,7 @@
         "mobiledetect"
     ],
     "support": {
-        "docs": "https://github.com/sjelfull/craft3-mobiledetect/blob/master/README.md",
+        "docs": "https://github.com/sjelfull/craft3-mobiledetect/blob/v2/README.md",
         "issues": "https://github.com/sjelfull/craft3-mobiledetect/issues"
     },
     "license": "MIT",
