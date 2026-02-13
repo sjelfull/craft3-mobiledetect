@@ -7,27 +7,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 3.0.0 - 2026-02-13
 
 ### Added
-- Craft 5.5+ support
-- PHP 8.2+ requirement
-- Mobile_Detect library upgraded to v4.8
-- ECS, PHPStan, and Rector dev tooling
-- Pest test suite
-- Proper type declarations throughout
+- Craft 5 support
+- PHP 8.2+ support
 
 ### Changed
-- `getScriptVersion` renamed to `getVersion` (matching upstream library)
-- Twig variable now delegates to service (single code path)
-- Plugin uses `getInstance()` instead of static `$plugin` property
-- OS/browser magic methods (`isiOS`, `isAndroidOS`, `isChrome`, etc.) now route through `__call()` — all still work in Twig
+- `getScriptVersion` renamed to `getVersion` (upstream library change)
 
 ### Removed
 - `mobileGrade` method (removed in Mobile_Detect v4)
 - `getCfHeaders` / `setCfHeaders` (use `getCloudFrontHeaders` on service)
-- Static `$plugin` property
-- `version` field from composer.json (tag-based versioning)
-- `repositories` block from composer.json
-- `schemaVersion` from plugin config (no database tables)
-- `components` from plugin extra config (registered in `init()`)
 
 ## 2.0.0 - 2022-10-03
 
