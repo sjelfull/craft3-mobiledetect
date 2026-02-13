@@ -1,105 +1,90 @@
-# MobileDetect plugin for Craft CMS 3.x
+# MobileDetect plugin for Craft CMS 5
 
-Use Mobile_Detect for detecting mobile devices (including tablets)
+Use Mobile_Detect for detecting mobile devices (including tablets).
 
 ![Screenshot](resources/img/icon.png)
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.0-beta.23 or later.
+- Craft CMS 5.5.0 or later
+- PHP 8.2 or later
 
 ## Installation
-
-To install the plugin, follow these instructions.
 
 1. Open your terminal and go to your Craft project:
 
         cd /path/to/project
 
-2. Then tell Composer to load the plugin:
+2. Tell Composer to load the plugin:
 
         composer require superbig/craft3-mobiledetect
 
-3. In the Control Panel, go to Settings → Plugins and click the “Install” button for MobileDetect.
+3. In the Control Panel, go to Settings → Plugins and click the "Install" button for MobileDetect.
 
-## MobileDetect Overview
+## Overview
 
-fairly complete wrapper for the [Mobile_Detect](http://mobiledetect.net/) library by [@serbanghita](https://github.com/serbanghita).**
+A wrapper for the [Mobile_Detect](https://github.com/serbanghita/Mobile-Detect) library (v4) by [@serbanghita](https://github.com/serbanghita).
 
-## Using MobileDetect
+## Usage
 
-The plugin exposes most of Mobile_Detect's methods, and can be used in your Twig:
+### Twig
 
 ```twig
 {{ craft.mobileDetect.isMobile ? 'I am mobile.' : 'I am not mobile.' }}
 ```
 
-...or as a PHP service:
+### PHP
 
 ```php
-<?php
-$isMobile = MobileDetect::$plugin->mobileDetect->isMobile();
+$service = \superbig\mobiledetect\MobileDetect::getInstance()->mobileDetectService;
+$isMobile = $service->isMobile();
 ```
 
-## Methods/usage
+## Methods
 
 ### Device detection
-```twig
-isMobile
-```
-_Detects all mobile devices, both phones and tablets_
 
-```twig
-isTablet
-isPhone
-```
+| Method | Description |
+|--------|-------------|
+| `isMobile` | Returns `true` for any mobile device (including tablets) |
+| `isTablet` | Returns `true` for tablets only |
+| `isPhone` | Returns `true` for phones only (mobile but not tablet) |
 
-### Mobile OS detection
-```twig
-isiOS
-isAndroidOS
-isBlackBerryOS
-isPalmOS
-isSymbianOS
-isWindowsMobileOS
-isWindowsPhoneOS
-```
+### Rule-based detection
 
-### Other methods
+| Method | Description |
+|--------|-------------|
+| `is(key)` | Test any rule by name, e.g. `is('iOS')`, `is('AndroidOS')`, `is('Chrome')` |
+| `match(pattern)` | Test using a regular expression against the user agent |
+| `version(component)` | Get the version of a component, e.g. `version('Android')` |
 
-```twig
-is(key)
-```
-_Test for anything, e.g. ```is('iphone')```_
+### Utility methods
 
-```twig
-match(pattern)
-```
-_Test using regular expressions_
+| Method | Description |
+|--------|-------------|
+| `getVersion` | Returns the Mobile_Detect library version |
+| `getUserAgent` | Get the current user agent string |
 
-```twig
-version(component)
-```
-_Get the version of a component, e.g. ```version('iPhone')```_
+## Upgrading from v2 (Craft 4)
 
-```twig
-mobileGrade
-```
-_Get browser grade (e.g. "A")_
+### Breaking changes
 
-```twig
-getScriptVersion
-```
-_Prints the MobileDetect library's version_
+- **`mobileGrade`** — Removed (not available in Mobile_Detect v4)
+- **`getScriptVersion`** — Renamed to `getVersion`
+- **`getCfHeaders` / `setCfHeaders`** — Replaced by `getCloudFrontHeaders` (service only)
+- **OS-specific methods** (`isiOS`, `isAndroidOS`, etc.) — Use `is('iOS')`, `is('AndroidOS')` instead
+- **`setUserAgent`** / **`setHttpHeaders`** — Available on the service only, not the Twig variable
 
-```twig
-getUserAgent
-setUserAgent(userAgent)
-getMobileHeaders
-getHttpHeaders
-setHttpHeaders(httpHeaders)
-getCfHeaders
-setCfHeaders(cfHeaders)
+### PHP service access
+
+The static `$plugin` property has been removed. Use `getInstance()`:
+
+```php
+// Before (Craft 4)
+MobileDetect::$plugin->mobileDetectService->isMobile();
+
+// After (Craft 5)
+MobileDetect::getInstance()->mobileDetectService->isMobile();
 ```
 
 Brought to you by [Superbig](https://superbig.co)

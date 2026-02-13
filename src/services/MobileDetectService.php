@@ -1,257 +1,134 @@
 <?php
-/**
- * MobileDetect plugin for Craft CMS 3.x
- *
- * Use Mobile_Detect for detecting mobile devices (including tablets)
- *
- * @link      https://superbig.co
- * @copyright Copyright (c) 2017 Superbig
- */
+
+declare(strict_types=1);
 
 namespace superbig\mobiledetect\services;
 
+use craft\base\Component;
 use Detection\MobileDetect as MobileDetectLib;
 
-use Craft;
-use craft\base\Component;
-
-/**
- * @author    Superbig
- * @package   MobileDetect
- * @since     1.0.0
- */
 class MobileDetectService extends Component
 {
-    private ?MobileDetectLib $_mobileDetect = null;
+    private ?MobileDetectLib $mobileDetect = null;
 
-    // Public Methods
-    // =========================================================================
-
-    /**
-     * @return \Mobile_Detect|null
-     */
-    public function getMobileDetect (): MobileDetectLib
+    public function getMobileDetect(): MobileDetectLib
     {
-        if ( $this->_mobileDetect === null ) {
-            $this->_mobileDetect = new MobileDetectLib();
+        if ($this->mobileDetect === null) {
+            $this->mobileDetect = new MobileDetectLib();
         }
 
-        return $this->_mobileDetect;
+        return $this->mobileDetect;
     }
 
     /**
-     * Returns true for any mobile device (including tablets!)
+     * Returns true for any mobile device (including tablets).
      */
-    public function isMobile (): bool
+    public function isMobile(): bool
     {
         return $this->getMobileDetect()->isMobile();
     }
 
     /**
-     * Returns true for tablets only
+     * Returns true for tablets only.
      */
-    public function isTablet (): bool
+    public function isTablet(): bool
     {
         return $this->getMobileDetect()->isTablet();
     }
 
     /**
-     * Returns true for phones only
+     * Returns true for phones only (mobile but not tablet).
      */
-    public function isPhone (): bool
+    public function isPhone(): bool
     {
         return $this->isMobile() && !$this->isTablet();
     }
 
     /**
-     * I can haz iOS?
-     *
-     * @return mixed
+     * Test any rule by name, e.g. is('iOS'), is('AndroidOS'), is('Chrome').
      */
-    public function isiOS (): bool
+    public function is(string $key): bool
     {
-        return $this->getMobileDetect()->isiOS();
+        return (bool) $this->getMobileDetect()->is($key);
     }
 
     /**
-     * I can haz Android?
-     *
-     * @return mixed
+     * Match a custom regex against the user agent.
      */
-    public function isAndroidOS (): bool
+    public function match(string $pattern, ?string $userAgent = null): bool
     {
-        return $this->getMobileDetect()->isAndroidOS();
+        return $this->getMobileDetect()->match($pattern, $userAgent ?? $this->getUserAgent() ?? '');
     }
 
     /**
-     * I can haz BlackBerry?
-     *
-     * @return mixed
+     * Get the version of a component, e.g. version('Android').
      */
-    public function isBlackBerryOS (): bool
+    public function version(string $component, string $type = 'float'): string|float|false
     {
-        return $this->getMobileDetect()->isBlackBerryOS();
+        return $this->getMobileDetect()->version($component, $type);
     }
 
     /**
-     * I can haz Palm?
-     *
-     * @return mixed
+     * Returns the Mobile_Detect library version.
      */
-    public function isPalmOS (): bool
+    public function getVersion(): string
     {
-        return $this->getMobileDetect()->isPalmOS();
+        return $this->getMobileDetect()->getVersion();
     }
 
     /**
-     * I can haz Symbian?
-     *
-     * @return mixed
+     * Get the current user agent string.
      */
-    public function isSymbianOS (): bool
-    {
-        return $this->getMobileDetect()->isSymbianOS();
-    }
-
-    /**
-     * I can haz Windows Mobile?
-     *
-     * @return mixed
-     */
-    public function isWindowsMobileOS (): bool
-    {
-        return $this->getMobileDetect()->isWindowsMobileOS();
-    }
-
-    /**
-     * I can haz Windows Phone?
-     *
-     * @return mixed
-     */
-    public function isWindowsPhoneOS (): bool
-    {
-        return $this->getMobileDetect()->isWindowsPhoneOS();
-    }
-
-    /**
-     * Test anything, e.g. is('iphone')
-     *
-     * @param      $key
-     * @param null $userAgent
-     * @param null $httpHeaders
-     *
-     * @return bool|int|null
-     */
-    public function is ($key, $userAgent = null, $httpHeaders = null)
-    {
-        return $this->getMobileDetect()->is($key, $userAgent, $httpHeaders);
-    }
-
-
-    /**
-     * Do the regex!
-     *
-     * @param      $pattern
-     * @param null $userAgent
-     */
-    public function match ($pattern, $userAgent = null): bool
-    {
-        return $this->getMobileDetect()->match($pattern, $userAgent);
-    }
-
-    /**
-     *  Get the version of any component, e.g. version('Android')
-     *
-     * @param $component
-     *
-     * @return bool|int|null
-     */
-    public function version ($component)
-    {
-        return $this->getMobileDetect()->is($component);
-    }
-
-    /**
-     * Returns browser grade, e.g "A"
-     */
-    public function mobileGrade (): string
-    {
-        return $this->getMobileDetect()->mobileGrade();
-    }
-
-    /**
-     * Returns the Mobile_Detect library version
-     */
-    public function getScriptVersion (): string
-    {
-        return $this->getMobileDetect()->getScriptVersion();
-    }
-
-    /**
-     * Get user agent
-     */
-    public function getUserAgent (): ?string
+    public function getUserAgent(): ?string
     {
         return $this->getMobileDetect()->getUserAgent();
     }
 
     /**
-     * Set user agent
-     *
-     * @param null $userAgent
+     * Set the user agent string.
      */
-    public function setUserAgent ($userAgent = null): ?string
+    public function setUserAgent(string $userAgent): void
     {
-        return $this->getMobileDetect()->setUserAgent($userAgent);
+        $this->getMobileDetect()->setUserAgent($userAgent);
     }
 
     /**
-     * Get mobile headers
+     * Get mobile detection headers.
      *
-     * @return mixed[]
+     * @return array<string, string>
      */
-    public function getMobileHeaders (): array
+    public function getMobileHeaders(): array
     {
         return $this->getMobileDetect()->getMobileHeaders();
     }
 
     /**
-     * Get http headers
+     * Get all HTTP headers.
      *
-     * @return mixed[]
+     * @return array<string, string>
      */
-    public function getHttpHeaders (): array
+    public function getHttpHeaders(): array
     {
         return $this->getMobileDetect()->getHttpHeaders();
     }
 
     /**
-     * Set http headers
+     * Set HTTP headers.
      *
-     * @param null $httpHeaders
+     * @param array<string, string> $httpHeaders
      */
-    public function setHttpHeaders ($httpHeaders = null): void
+    public function setHttpHeaders(array $httpHeaders): void
     {
         $this->getMobileDetect()->setHttpHeaders($httpHeaders);
     }
 
     /**
-     * Get CloudFront headers
+     * Get CloudFront HTTP headers.
      *
-     * @return mixed[]
+     * @return array<string, string>
      */
-    public function getCfHeaders (): array
+    public function getCloudFrontHeaders(): array
     {
-        return $this->getMobileDetect()->getCfHeaders();
-    }
-
-    /**
-     * Set CloudFront headers
-     *
-     * @param null $cfHeaders
-     */
-    public function setCfHeaders ($cfHeaders = null): void
-    {
-        $this->getMobileDetect()->setCfHeaders($cfHeaders);
+        return $this->getMobileDetect()->getCloudFrontHttpHeaders();
     }
 }

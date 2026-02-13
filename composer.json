@@ -2,7 +2,6 @@
     "name": "superbig/craft3-mobiledetect",
     "description": "Use Mobile_Detect for detecting mobile devices (including tablets)",
     "type": "craft-plugin",
-    "version": "2.0.0",
     "keywords": [
         "craft",
         "cms",
@@ -11,7 +10,7 @@
         "mobiledetect"
     ],
     "support": {
-        "docs": "https://github.com/sjelfull/craft3-mobiledetect/blob/v2/README.md",
+        "docs": "https://github.com/sjelfull/craft3-mobiledetect/blob/craft5/README.md",
         "issues": "https://github.com/sjelfull/craft3-mobiledetect/issues"
     },
     "license": "MIT",
@@ -22,30 +21,40 @@
         }
     ],
     "require": {
-        "craftcms/cms": "^4.0.0",
-        "mobiledetect/mobiledetectlib": "^2.8"
+        "php": "^8.2.0",
+        "craftcms/cms": "^5.5",
+        "mobiledetect/mobiledetectlib": "^4.8"
     },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        }
-    ],
+    "require-dev": {
+        "craftcms/ecs": "dev-main",
+        "craftcms/phpstan": "dev-main",
+        "craftcms/rector": "dev-main",
+        "markhuot/craft-pest-core": "^3.0"
+    },
     "autoload": {
         "psr-4": {
-          "superbig\\mobiledetect\\": "src/"
+            "superbig\\mobiledetect\\": "src/"
         }
+    },
+    "scripts": {
+        "phpstan": "phpstan --ansi --memory-limit=1G",
+        "check-cs": "ecs check --ansi",
+        "fix-cs": "ecs check --fix --ansi"
+    },
+    "config": {
+        "allow-plugins": {
+            "craftcms/plugin-installer": true,
+            "yiisoft/yii2-composer": true,
+            "pestphp/pest-plugin": true
+        },
+        "optimize-autoloader": true,
+        "sort-packages": true
     },
     "extra": {
         "name": "MobileDetect",
         "handle": "mobile-detect",
-        "schemaVersion": "1.0.0",
         "hasCpSettings": false,
         "hasCpSection": false,
-        "changelogUrl": "https://raw.githubusercontent.com/sjelfull/craft3-mobiledetect/master/CHANGELOG.md",
-        "components": {
-            "mobileDetectService": "superbig\\mobiledetect\\services\\MobileDetectService"
-        },
         "class": "superbig\\mobiledetect\\MobileDetect"
     }
 }
