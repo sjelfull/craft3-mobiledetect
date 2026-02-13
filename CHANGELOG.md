@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - `getScriptVersion` renamed to `getVersion` (matching upstream library)
 - Twig variable now delegates to service (single code path)
 - Plugin uses `getInstance()` instead of static `$plugin` property
-- OS detection methods replaced by generic `is()` method (e.g. `is('iOS')`)
+- OS/browser magic methods (`isiOS`, `isAndroidOS`, `isChrome`, etc.) now route through `__call()` — all still work in Twig
 
 ### Removed
 - `mobileGrade` method (removed in Mobile_Detect v4)

@@ -30,7 +30,29 @@ A wrapper for the [Mobile_Detect](https://github.com/serbanghita/Mobile-Detect) 
 ### Twig
 
 ```twig
+{# Device detection #}
 {{ craft.mobileDetect.isMobile ? 'I am mobile.' : 'I am not mobile.' }}
+{{ craft.mobileDetect.isTablet ? 'Tablet' : 'Not a tablet' }}
+{{ craft.mobileDetect.isPhone ? 'Phone' : 'Not a phone' }}
+
+{# OS detection — magic methods #}
+{% if craft.mobileDetect.isiOS %}
+    <p>Welcome, iOS user!</p>
+{% elseif craft.mobileDetect.isAndroidOS %}
+    <p>Welcome, Android user!</p>
+{% endif %}
+
+{# Browser detection — magic methods #}
+{% if craft.mobileDetect.isChrome %}
+    <p>You're using Chrome</p>
+{% elseif craft.mobileDetect.isSafari %}
+    <p>You're using Safari</p>
+{% endif %}
+
+{# Generic rule matching #}
+{{ craft.mobileDetect.is('iOS') }}
+{{ craft.mobileDetect.is('WindowsPhoneOS') }}
+{{ craft.mobileDetect.is('Firefox') }}
 ```
 
 ### PHP
@@ -38,6 +60,7 @@ A wrapper for the [Mobile_Detect](https://github.com/serbanghita/Mobile-Detect) 
 ```php
 $service = \superbig\mobiledetect\MobileDetect::getInstance()->mobileDetectService;
 $isMobile = $service->isMobile();
+$isIOS = $service->is('iOS');
 ```
 
 ## Methods
@@ -49,6 +72,22 @@ $isMobile = $service->isMobile();
 | `isMobile` | Returns `true` for any mobile device (including tablets) |
 | `isTablet` | Returns `true` for tablets only |
 | `isPhone` | Returns `true` for phones only (mobile but not tablet) |
+
+### OS & browser detection (magic methods)
+
+Any `is*` call is forwarded to the library's rule matching. These work in both Twig and PHP:
+
+| Method | Description |
+|--------|-------------|
+| `isiOS` | iOS devices |
+| `isAndroidOS` | Android devices |
+| `isBlackBerryOS` | BlackBerry devices |
+| `isWindowsMobileOS` | Windows Mobile devices |
+| `isWindowsPhoneOS` | Windows Phone devices |
+| `isChrome` | Chrome browser |
+| `isSafari` | Safari browser |
+| `isFirefox` | Firefox browser |
+| `is*` | Any rule the library supports — see [Mobile_Detect docs](https://github.com/serbanghita/Mobile-Detect) |
 
 ### Rule-based detection
 
@@ -72,8 +111,11 @@ $isMobile = $service->isMobile();
 - **`mobileGrade`** — Removed (not available in Mobile_Detect v4)
 - **`getScriptVersion`** — Renamed to `getVersion`
 - **`getCfHeaders` / `setCfHeaders`** — Replaced by `getCloudFrontHeaders` (service only)
-- **OS-specific methods** (`isiOS`, `isAndroidOS`, etc.) — Use `is('iOS')`, `is('AndroidOS')` instead
 - **`setUserAgent`** / **`setHttpHeaders`** — Available on the service only, not the Twig variable
+
+### What still works
+
+All `is*` magic methods (`isiOS`, `isAndroidOS`, `isChrome`, etc.) continue to work in Twig templates — no changes needed.
 
 ### PHP service access
 

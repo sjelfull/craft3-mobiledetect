@@ -48,3 +48,37 @@ it('delegates getVersion to service', function () {
 it('delegates getUserAgent to service', function () {
     expect($this->variable->getUserAgent())->toContain('iPhone');
 });
+
+// Magic __call() tests
+
+it('forwards isiOS() via __call to service', function () {
+    expect($this->variable->isiOS())->toBeTrue();
+});
+
+it('forwards isAndroidOS() via __call and returns false for iPhone UA', function () {
+    expect($this->variable->isAndroidOS())->toBeFalse();
+});
+
+it('forwards isChrome() via __call and returns false for Safari UA', function () {
+    expect($this->variable->isChrome())->toBeFalse();
+});
+
+it('forwards isSafari() via __call for iPhone Safari UA', function () {
+    expect($this->variable->isSafari())->toBeTrue();
+});
+
+it('throws BadMethodCallException for non-is methods', function () {
+    $this->variable->fooBar();
+})->throws(BadMethodCallException::class, 'No such method: fooBar');
+
+it('detects Android OS via magic method with Android UA', function () {
+    // Swap to an Android user agent
+    $service = MobileDetect::getInstance()->mobileDetectService;
+    $service->getMobileDetect()->setUserAgent(
+        'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36'
+    );
+
+    expect($this->variable->isAndroidOS())->toBeTrue();
+    expect($this->variable->isiOS())->toBeFalse();
+    expect($this->variable->isChrome())->toBeTrue();
+});
