@@ -6,6 +6,7 @@ namespace superbig\mobiledetect\variables;
 
 use BadMethodCallException;
 use superbig\mobiledetect\MobileDetect;
+use superbig\mobiledetect\services\MobileDetectService;
 
 /**
  * Twig variable for MobileDetect.
@@ -23,44 +24,53 @@ use superbig\mobiledetect\MobileDetect;
  */
 class MobileDetectVariable
 {
+    public function __construct(
+        private ?MobileDetectService $service = null,
+    ) {}
+
+    private function getService(): MobileDetectService
+    {
+        return $this->service ?? MobileDetect::getInstance()->mobileDetectService;
+    }
+
     public function isMobile(): bool
     {
-        return MobileDetect::getInstance()->mobileDetectService->isMobile();
+        return $this->getService()->isMobile();
     }
 
     public function isTablet(): bool
     {
-        return MobileDetect::getInstance()->mobileDetectService->isTablet();
+        return $this->getService()->isTablet();
     }
 
     public function isPhone(): bool
     {
-        return MobileDetect::getInstance()->mobileDetectService->isPhone();
+        return $this->getService()->isPhone();
     }
 
     public function is(string $key): bool
     {
-        return MobileDetect::getInstance()->mobileDetectService->is($key);
+        return $this->getService()->is($key);
     }
 
     public function match(string $pattern, ?string $userAgent = null): bool
     {
-        return MobileDetect::getInstance()->mobileDetectService->match($pattern, $userAgent);
+        return $this->getService()->match($pattern, $userAgent);
     }
 
     public function version(string $component, string $type = 'float'): string|float|false
     {
-        return MobileDetect::getInstance()->mobileDetectService->version($component, $type);
+        return $this->getService()->version($component, $type);
     }
 
     public function getVersion(): string
     {
-        return MobileDetect::getInstance()->mobileDetectService->getVersion();
+        return $this->getService()->getVersion();
     }
 
     public function getUserAgent(): ?string
     {
-        return MobileDetect::getInstance()->mobileDetectService->getUserAgent();
+        return $this->getService()->getUserAgent();
     }
 
     /**
