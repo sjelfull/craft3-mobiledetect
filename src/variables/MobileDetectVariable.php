@@ -26,7 +26,8 @@ class MobileDetectVariable
 {
     public function __construct(
         private ?MobileDetectService $service = null,
-    ) {}
+    ) {
+    }
 
     private function getService(): MobileDetectService
     {
