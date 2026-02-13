@@ -5,7 +5,7 @@ use superbig\mobiledetect\services\MobileDetectService;
 use superbig\mobiledetect\variables\MobileDetectVariable;
 
 beforeEach(function () {
-    // Create a mock plugin instance with a real service
+    // Create a real service with an iPhone user agent
     $service = new MobileDetectService();
     $service->getMobileDetect()->setUserAgent(
         'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1'
@@ -15,12 +15,8 @@ beforeEach(function () {
     $plugin = $this->createMock(MobileDetect::class);
     $plugin->mobileDetectService = $service;
 
-    // Use reflection to set the static instance
-    $ref = new ReflectionProperty(\craft\base\Plugin::class, '_instances');
-    $ref->setAccessible(true);
-    $instances = $ref->getValue();
-    $instances[MobileDetect::class] = $plugin;
-    $ref->setValue(null, $instances);
+    // Craft 5 uses Yii::$app->loadedModules, not Plugin::$_instances
+    \Yii::$app->loadedModules[MobileDetect::class] = $plugin;
 
     $this->variable = new MobileDetectVariable();
 });
@@ -72,7 +68,7 @@ it('throws BadMethodCallException for non-is methods', function () {
 })->throws(BadMethodCallException::class, 'No such method: fooBar');
 
 it('detects Android OS via magic method with Android UA', function () {
-    // Swap to an Android user agent
+    // Swap to an Android user agent via the mocked singleton
     $service = MobileDetect::getInstance()->mobileDetectService;
     $service->getMobileDetect()->setUserAgent(
         'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36'
