@@ -1,105 +1,132 @@
-# MobileDetect plugin for Craft CMS 3.x
+# MobileDetect plugin for Craft CMS 5
 
-Use Mobile_Detect for detecting mobile devices (including tablets)
+Use Mobile_Detect for detecting mobile devices (including tablets).
 
 ![Screenshot](resources/img/icon.png)
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.0-beta.23 or later.
+- Craft CMS 5.5.0 or later
+- PHP 8.2 or later
 
 ## Installation
-
-To install the plugin, follow these instructions.
 
 1. Open your terminal and go to your Craft project:
 
         cd /path/to/project
 
-2. Then tell Composer to load the plugin:
+2. Tell Composer to load the plugin:
 
         composer require superbig/craft3-mobiledetect
 
-3. In the Control Panel, go to Settings → Plugins and click the “Install” button for MobileDetect.
+3. In the Control Panel, go to Settings → Plugins and click the "Install" button for MobileDetect.
 
-## MobileDetect Overview
+## Overview
 
-fairly complete wrapper for the [Mobile_Detect](http://mobiledetect.net/) library by [@serbanghita](https://github.com/serbanghita).**
+A wrapper for the [Mobile_Detect](https://github.com/serbanghita/Mobile-Detect) library (v4) by [@serbanghita](https://github.com/serbanghita).
 
-## Using MobileDetect
+## Usage
 
-The plugin exposes most of Mobile_Detect's methods, and can be used in your Twig:
+### Twig
 
 ```twig
+{# Device detection #}
 {{ craft.mobileDetect.isMobile ? 'I am mobile.' : 'I am not mobile.' }}
+{{ craft.mobileDetect.isTablet ? 'Tablet' : 'Not a tablet' }}
+{{ craft.mobileDetect.isPhone ? 'Phone' : 'Not a phone' }}
+
+{# OS detection — magic methods #}
+{% if craft.mobileDetect.isiOS %}
+    <p>Welcome, iOS user!</p>
+{% elseif craft.mobileDetect.isAndroidOS %}
+    <p>Welcome, Android user!</p>
+{% endif %}
+
+{# Browser detection — magic methods #}
+{% if craft.mobileDetect.isChrome %}
+    <p>You're using Chrome</p>
+{% elseif craft.mobileDetect.isSafari %}
+    <p>You're using Safari</p>
+{% endif %}
+
+{# Generic rule matching #}
+{{ craft.mobileDetect.is('iOS') }}
+{{ craft.mobileDetect.is('WindowsPhoneOS') }}
+{{ craft.mobileDetect.is('Firefox') }}
 ```
 
-...or as a PHP service:
+### PHP
 
 ```php
-<?php
-$isMobile = MobileDetect::$plugin->mobileDetect->isMobile();
+$service = \superbig\mobiledetect\MobileDetect::getInstance()->mobileDetectService;
+$isMobile = $service->isMobile();
+$isIOS = $service->is('iOS');
 ```
 
-## Methods/usage
+## Methods
 
 ### Device detection
-```twig
-isMobile
-```
-_Detects all mobile devices, both phones and tablets_
 
-```twig
-isTablet
-isPhone
-```
+| Method | Description |
+|--------|-------------|
+| `isMobile` | Returns `true` for any mobile device (including tablets) |
+| `isTablet` | Returns `true` for tablets only |
+| `isPhone` | Returns `true` for phones only (mobile but not tablet) |
 
-### Mobile OS detection
-```twig
-isiOS
-isAndroidOS
-isBlackBerryOS
-isPalmOS
-isSymbianOS
-isWindowsMobileOS
-isWindowsPhoneOS
-```
+### OS & browser detection (magic methods)
 
-### Other methods
+Any `is*` call is forwarded to the library's rule matching. These work in both Twig and PHP:
 
-```twig
-is(key)
-```
-_Test for anything, e.g. ```is('iphone')```_
+| Method | Description |
+|--------|-------------|
+| `isiOS` | iOS devices |
+| `isAndroidOS` | Android devices |
+| `isBlackBerryOS` | BlackBerry devices |
+| `isWindowsMobileOS` | Windows Mobile devices |
+| `isWindowsPhoneOS` | Windows Phone devices |
+| `isChrome` | Chrome browser |
+| `isSafari` | Safari browser |
+| `isFirefox` | Firefox browser |
+| `is*` | Any rule the library supports — see [Mobile_Detect docs](https://github.com/serbanghita/Mobile-Detect) |
 
-```twig
-match(pattern)
-```
-_Test using regular expressions_
+### Rule-based detection
 
-```twig
-version(component)
-```
-_Get the version of a component, e.g. ```version('iPhone')```_
+| Method | Description |
+|--------|-------------|
+| `is(key)` | Test any rule by name, e.g. `is('iOS')`, `is('AndroidOS')`, `is('Chrome')` |
+| `match(pattern)` | Test using a regular expression against the user agent |
+| `version(component)` | Get the version of a component, e.g. `version('Android')` |
 
-```twig
-mobileGrade
-```
-_Get browser grade (e.g. "A")_
+### Utility methods
 
-```twig
-getScriptVersion
-```
-_Prints the MobileDetect library's version_
+| Method | Description |
+|--------|-------------|
+| `getVersion` | Returns the Mobile_Detect library version |
+| `getUserAgent` | Get the current user agent string |
 
-```twig
-getUserAgent
-setUserAgent(userAgent)
-getMobileHeaders
-getHttpHeaders
-setHttpHeaders(httpHeaders)
-getCfHeaders
-setCfHeaders(cfHeaders)
+## Upgrading from v2 (Craft 4)
+
+### Breaking changes
+
+- **`mobileGrade`** — Removed (not available in Mobile_Detect v4)
+- **`getScriptVersion`** — Renamed to `getVersion`
+- **`getCfHeaders` / `setCfHeaders`** — Replaced by `getCloudFrontHeaders` (service only)
+- **`setUserAgent`** / **`setHttpHeaders`** — Available on the service only, not the Twig variable
+
+### What still works
+
+All `is*` magic methods (`isiOS`, `isAndroidOS`, `isChrome`, etc.) continue to work in Twig templates — no changes needed.
+
+### PHP service access
+
+The static `$plugin` property has been removed. Use `getInstance()`:
+
+```php
+// Before (Craft 4)
+MobileDetect::$plugin->mobileDetectService->isMobile();
+
+// After (Craft 5)
+MobileDetect::getInstance()->mobileDetectService->isMobile();
 ```
 
 Brought to you by [Superbig](https://superbig.co)

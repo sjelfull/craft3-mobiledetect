@@ -1,77 +1,39 @@
 <?php
-/**
- * MobileDetect plugin for Craft CMS 3.x
- *
- * Use Mobile_Detect for detecting mobile devices (including tablets)
- *
- * @link      https://superbig.co
- * @copyright Copyright (c) 2017 Superbig
- */
+
+declare(strict_types=1);
 
 namespace superbig\mobiledetect;
 
-use superbig\mobiledetect\services\MobileDetectService as MobileDetectServiceService;
-use superbig\mobiledetect\variables\MobileDetectVariable;
-
 use Craft;
 use craft\base\Plugin;
-use craft\services\Plugins;
-use craft\events\PluginEvent;
 use craft\web\twig\variables\CraftVariable;
-
+use superbig\mobiledetect\services\MobileDetectService;
+use superbig\mobiledetect\variables\MobileDetectVariable;
 use yii\base\Event;
 
 /**
- * Class MobileDetect
- *
- * @author    Superbig
- * @package   MobileDetect
- * @since     1.0.0
- *
- * @property  MobileDetectServiceService $mobileDetectService
+ * @property MobileDetectService $mobileDetectService
  */
 class MobileDetect extends Plugin
 {
-    // Static Properties
-    // =========================================================================
-
-    /**
-     * @var MobileDetect
-     */
-    public static $plugin;
-
-    // Public Methods
-    // =========================================================================
-
-    /**
-     * @inheritdoc
-     */
-    public function init ()
+    public function init(): void
     {
         parent::init();
-        self::$plugin = $this;
+
+        $this->setComponents([
+            'mobileDetectService' => MobileDetectService::class,
+        ]);
 
         Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_INIT,
-            function (Event $event) {
+            static function(Event $event): void {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
                 $variable->set('mobileDetect', MobileDetectVariable::class);
             }
         );
 
-        Craft::info(
-            Craft::t(
-                'mobile-detect',
-                '{name} plugin loaded',
-                [ 'name' => $this->name ]
-            ),
-            __METHOD__
-        );
+        Craft::info('MobileDetect plugin loaded', __METHOD__);
     }
-
-    // Protected Methods
-    // =========================================================================
-
 }
